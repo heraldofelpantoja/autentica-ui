@@ -22,6 +22,20 @@ const routes = [
     name: 'permissao-form',
     component: () => import('../views/permission/PermissionForm.vue'),
   },
+
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('../views/user/UserView.vue'),
+  },
+
+  {
+    path: '/user-form',
+    name: 'user-form',
+    component: () => import('../views/user/UserForm.vue'),
+  },
+
+
 ]
 
 const router = createRouter({
