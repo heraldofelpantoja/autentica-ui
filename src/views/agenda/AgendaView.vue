@@ -1,18 +1,25 @@
 <template>
   <div>
-    <Fieldset legend="Gerenciamento de Permissões">
+    <Fieldset legend="Gerenciamento de Agenda">
       <Toolbar>
         <template #start> <Button @click="goNew">Novo</Button> </template>
       </Toolbar>
       <DataTable :value="list">
-        <Column field="id" header="id"></Column>
-        <Column field="name" header="name"></Column>
+        <Column field="id" header="#"></Column>
+        <Column field="name" header="Nome"></Column>
+        <Column field="contact" header="Contato"></Column>
+
         <Column header="Ações">
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
               class="p-button-rounded p-button-success mr-2"
               @click="showUpdate(slotProps.data)"
+            />
+            <Button
+              icon="pi pi-phone"
+              class="p-button-rounded mr-2"
+              @click="call(slotProps.data)"
             />
             <Button
               icon="pi pi-trash"
@@ -27,18 +34,18 @@
 
 <script>
 //Service
-import PermissionService from "../../service/permission_service";
+import AgendaService from "../../service/agenda_service";
 
 //Models
-import Permission from "../../models/permission";
+import Agenda from "../../models/agenda";
 import RoutesName from "@/router/routes_name";
 
 export default {
   data() {
     return {
-      obj: new Permission(),
+      obj: new Agenda(),
       list: [],
-      service: new PermissionService(),
+      service: new AgendaService(),
     };
   },
   mounted() {
@@ -51,14 +58,35 @@ export default {
       });
     },
     goNew() {
-      this.obj = new Permission();
-      sessionStorage.setItem("permission", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.PERMISSION_FORM_ROUTE);
+      this.obj = new Agenda();
+      sessionStorage.setItem("agenda", JSON.stringify(this.obj));
+      this.$router.push(RoutesName.AGENDA_FORM_ROUTE);
+    },
+    call(data) {
+      this.obj = data;
+      this.$confirm.require({
+        header: `Ligando...`,
+        message: `Ligando para o contato ${this.obj.name}`,
+        acceptLabel: "Desligar",
+        rejectLabel: "",
+        accept: () => {
+          this.obj.call.push(new Date());
+          this.service.update(this.obj).then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "Alerta de Sucesso.",
+              detail: "Ligação efetuada com sucesso.",
+              life: 3000,
+            });
+            this.findAll();
+          });
+        },
+      });
     },
     showUpdate(data) {
       this.obj = data;
-      sessionStorage.setItem("permission", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.PERMISSION_FORM_ROUTE);
+      sessionStorage.setItem("agenda", JSON.stringify(this.obj));
+      this.$router.push(RoutesName.AGENDA_FORM_ROUTE);
     },
     showRemove(data) {
       this.obj = data;
@@ -90,3 +118,12 @@ export default {
 </script>
 
 <style></style>
+
+
+
+
+
+
+
+
+

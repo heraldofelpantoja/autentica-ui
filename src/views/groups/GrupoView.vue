@@ -26,12 +26,12 @@
 </template>
 
 <script>
-
 //Service
 import GrupoService from "../../service/grupo_service";
 
 //Models
 import Grupo from "../../models/grupo";
+import RoutesName from "@/router/routes_name";
 
 export default {
   data() {
@@ -53,12 +53,12 @@ export default {
     goNew() {
       this.obj = new Grupo();
       sessionStorage.setItem("grupo", JSON.stringify(this.obj));
-      this.$router.push("/form");
+      this.$router.push(RoutesName.GROUP_FORM_ROUTE);
     },
     showUpdate(data) {
       this.obj = data;
       sessionStorage.setItem("grupo", JSON.stringify(this.obj));
-      this.$router.push("/form");
+      this.$router.push(RoutesName.GROUP_FORM_ROUTE);
     },
     showRemove(data) {
       this.obj = data;

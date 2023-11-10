@@ -1,36 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GrupoView from '../views/groups/GrupoView.vue'
+import RoutesName from './routes_name'
 
 const routes = [
   {
-    path: '/',
+    path: RoutesName.HOME_ROUTE,
     name: 'home',
+    component: () => import('../views/agenda/AgendaView.vue')
+  },
+  {
+    path: RoutesName.AGENDA_FORM_ROUTE,
+    name: 'agenda-form',
+    component: () => import('../views/agenda/AgendaForm.vue'),
+  },
+  {
+    path: RoutesName.GROUP_ROUTE,
+    name: 'grupo',
     component: GrupoView
   },
   {
-    path: '/form',
-    name: 'form',
+    path: RoutesName.GROUP_FORM_ROUTE,
+    name: 'grupo-form',
     component: () => import('../views/groups/GrupoForm.vue')
   },
   {
-    path: '/permissao',
+    path: RoutesName.PERMISSION_ROUTE,
     name: 'permissao',
     component: () => import('../views/permission/PermissionView.vue'),
   },
   {
-    path: '/permissao-form',
+    path: RoutesName.PERMISSION_FORM_ROUTE,
     name: 'permissao-form',
     component: () => import('../views/permission/PermissionForm.vue'),
   },
-
   {
-    path: '/user',
+    path: RoutesName.USER_ROUTE,
     name: 'user',
     component: () => import('../views/user/UserView.vue'),
   },
 
   {
-    path: '/user-form',
+    path: RoutesName.USER_FORM_ROUTE,
     name: 'user-form',
     component: () => import('../views/user/UserForm.vue'),
   },

@@ -26,6 +26,10 @@ import Toast from "primevue/toast";
 import ToastService from "primevue/toastservice";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
+import Sidebar from 'primevue/sidebar';
+
+import OrderList from 'primevue/orderlist';
+
 
 const app = createApp(App);
 app.use(PrimeVue);
@@ -45,7 +49,9 @@ app.component("Fieldset", Fieldset);
 app.component("ConfirmDialog", ConfirmDialog);
 app.component("Toast", Toast);
 app.component("Dropdown", Dropdown)
-app.component("MultiSelect", MultiSelect)
+app.component("MultiSelect", MultiSelect);
+app.component("Sidebar", Sidebar);
+app.component('OrderList', OrderList)
 
 app.mount("#app");
 

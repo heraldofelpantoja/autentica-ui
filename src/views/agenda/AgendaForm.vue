@@ -1,24 +1,22 @@
 <template>
-  <Fieldset legend="Gerenciamento de Grupos">
+  <Fieldset legend="Agenda">
     <form class="grid p-fluid" @submit.prevent="send">
       <div class="field col-6">
-        <label for="nomegrupo">Nome do Grupo: </label>
+        <label for="nomegrupo">Agenda:</label>
         <InputText
           id="nomegrupo"
-          placeholder="Digite o nome do grupo"
+          placeholder="Digite o nome do contato"
           required
           v-model="obj.name"
         />
       </div>
+
       <div class="field col-6">
-        <label>Permissões</label>
-        <MultiSelect
-          :options="permissions"
-          optionLabel="name"
+        <label>Contato</label>
+        <InputText
           placeholder="Selecione as permissões"
-          filter="true"
-          showClear="true"
-          v-model="obj.permissions"
+          required
+          v-model="obj.contact"
         />
       </div>
 
@@ -36,29 +34,49 @@
         <Button label="Enviar" type="submit"></Button>
       </div>
     </form>
+    <br />
+    <Fieldset legend="Ligações">
+      <OrderList v-model="obj.call">
+        <template #item="slotProps">
+          <div class="flex flex-wrap p-2 align-items-center gap-3">
+            <div class="flex-1 flex flex-column gap-2">
+              <span class="font-bold">{{
+                Moment(slotProps.item).format("DD/MM/YYYY HH:mm:ss")
+              }}</span>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-phone text-sm"></i>
+                <span>Ligação</span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </OrderList>
+    </Fieldset>
   </Fieldset>
 </template>
-
-<script>
+  
+  <script>
 //Models
-import Grupo from "../../models/grupo";
+import Agenda from "../../models/agenda";
 
 //Services
-import GrupoService from "@/service/grupo_service";
-import PermissionService from "@/service/permission_service";
-import RoutesName from "@/router/routes_name";
+import AgendaService from "@/service/agenda_service";
+
+//Libs
+import Moment from "moment";
 
 export default {
   data() {
     return {
-      obj: new Grupo(),
-      service: new GrupoService(),
-      permissionService: new PermissionService(),
+      obj: new Agenda(),
+      service: new AgendaService(),
+      permissionService: new AgendaService(),
       permissions: [],
+      Moment,
     };
   },
   mounted() {
-    const json = sessionStorage.getItem("grupo");
+    const json = sessionStorage.getItem("agenda");
     this.obj = JSON.parse(json);
     this.getPermission();
   },
@@ -92,10 +110,11 @@ export default {
       }
     },
     back() {
-      this.$router.push(RoutesName.GROUP_ROUTE);
+      this.$router.push("/");
     },
   },
 };
 </script>
-
-<style></style>
+  
+  <style></style>
+  

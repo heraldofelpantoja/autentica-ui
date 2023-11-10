@@ -10,7 +10,7 @@
           v-model="obj.name"
         />
       </div>
-      
+
       <div class="field col-12">
         <hr />
       </div>
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-
 //Models
 import Permission from "../../models/permission";
 
 //Services
 import PermissionService from "@/service/permission_service";
+import RoutesName from "@/router/routes_name";
 
 export default {
   data() {
@@ -72,7 +72,7 @@ export default {
       }
     },
     back() {
-      this.$router.push("/permissao");
+      this.$router.push(RoutesName.PERMISSION_ROUTE);
     },
   },
 };
