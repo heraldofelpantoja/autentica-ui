@@ -13,9 +13,13 @@
       <InputText
         id="nome_permissao"
         placeholder="Digite o nome da Permissão"
-        required
-        v-model="obj.name"
+        v-model="v$.obj.name.$model"
+        maxlength="150"
+        :class="{ 'p-invalid': submitted && v$.obj.name.$invalid }"
       />
+      <small class="p-error" v-if="submitted && v$.obj.name.$invalid"
+        >Campo inválido</small
+      >
     </div>
 
     <template #footer>
@@ -25,7 +29,11 @@
         icon="pi pi-times"
         @click="hideDialog"
       ></Button>
-      <Button label="Salvar" icon="pi pi-check" @click="send"></Button>
+      <Button
+        label="Salvar"
+        icon="pi pi-check"
+        @click="send(!v$.obj.$invalid)"
+      ></Button>
     </template>
   </Dialog>
 </template>
@@ -37,12 +45,23 @@ import Permission from "../../../models/permission";
 //Services
 import PermissionService from "../../../service/permission_service";
 
+import { useVuelidate } from "@vuelidate/core";
+
 export default {
+  setup() {
+    return { v$: useVuelidate() };
+  },
   props: ["objSelected"],
   data() {
     return {
       obj: new Permission(),
       service: new PermissionService(),
+      submitted: false,
+    };
+  },
+  validations() {
+    return {
+      obj: new Permission().validations(),
     };
   },
   computed: {
@@ -68,27 +87,32 @@ export default {
       this.$emit("findAll");
       this.visible = false;
     },
-    send() {
-      if (this.obj.id == null) {
-        this.service.create(this.obj).then(() => {
-          this.$toast.add({
-            severity: "success",
-            summary: "Alerta de Sucesso.",
-            detail: "Criado com sucesso.",
-            life: 3000,
+    send(isFormValid) {
+      this.submitted = true;
+      if (isFormValid) {
+        if (this.obj.id == null) {
+          this.service.create(this.obj).then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "Alerta de Sucesso.",
+              detail: "Criado com sucesso.",
+              life: 3000,
+            });
+            this.hideDialog();
           });
-          this.hideDialog();
-        });
+        } else {
+          this.service.update(this.obj).then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "Alerta de Sucesso.",
+              detail: "Atualizado com sucesso.",
+              life: 3000,
+            });
+            this.hideDialog();
+          });
+        }
       } else {
-        this.service.update(this.obj).then(() => {
-          this.$toast.add({
-            severity: "success",
-            summary: "Alerta de Sucesso.",
-            detail: "Atualizado com sucesso.",
-            life: 3000,
-          });
-          this.hideDialog();
-        });
+        return;
       }
     },
   },
