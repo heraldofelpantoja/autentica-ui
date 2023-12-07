@@ -18,20 +18,11 @@ const routes = [
     name: 'grupo',
     component: GrupoView
   },
-  {
-    path: RoutesName.GROUP_FORM_ROUTE,
-    name: 'grupo-form',
-    component: () => import('../views/groups/GrupoForm.vue')
-  },
+
   {
     path: RoutesName.PERMISSION_ROUTE,
     name: 'permissao',
     component: () => import('../views/permission/PermissionView.vue'),
-  },
-  {
-    path: RoutesName.PERMISSION_FORM_ROUTE,
-    name: 'permissao-form',
-    component: () => import('../views/permission/PermissionForm.vue'),
   },
   {
     path: RoutesName.USER_ROUTE,

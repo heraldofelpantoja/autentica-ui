@@ -27,36 +27,7 @@
   </div>
 
   <!--DIALOG HERALDO-->
-
-  <Dialog
-    v-model:visible="visible"
-    :modal="true"
-    header="Formulário de Usuários"
-    :style="{ width: '50rem' }"
-    class="p-fluid"
-    @hide="hideDialog"
-  >
-    <div class="field">
-      <label for="nome_usuario">Nome </label>
-      <InputText
-        id="nome_usuario"
-        placeholder="Digite o nome do Usuário"
-        required
-        v-model="obj.name"
-      />
-    </div>
-
-    <template #footer>
-      <Button
-        label="Cancelar"
-        class="p-button-text"
-        icon="pi pi-times"
-        @click="hideDialog"
-      ></Button>
-
-      <Button label="Salvar" icon="pi pi-check" @click="send"></Button>
-    </template>
-  </Dialog>
+  <DialogForm :objSelected="obj" @findAll="findAll"></DialogForm>
 </template>
   
 
@@ -68,15 +39,30 @@ import UserService from "../../service/user_service";
 import User from "../../models/user";
 import RoutesName from "@/router/routes_name";
 
+//Components
+import DialogForm from "./components/DialogForm.vue";
+
 export default {
+  components: {
+    DialogForm,
+  },
   data() {
     return {
       obj: new User(),
       list: [],
       service: new UserService(),
-      visible: false,
       RoutesName,
     };
+  },
+  computed: {
+    visible: {
+      get() {
+        return this.$store.state.user.dialogForm;
+      },
+      set(value) {
+        this.$store.state.user.dialogForm = value;
+      },
+    },
   },
   mounted() {
     this.findAll();
@@ -87,46 +73,13 @@ export default {
         this.list = data;
       });
     },
-
-    send() {
-      if (this.obj.id == null) {
-        this.service.create(this.obj).then(() => {
-          this.$toast.add({
-            severity: "success",
-            summary: "Alerta de Sucesso.",
-            detail: "Criado com sucesso.",
-            life: 3000,
-          });
-          this.hideDialog();
-        });
-      } else {
-        this.service.update(this.obj).then(() => {
-          this.$toast.add({
-            severity: "success",
-            summary: "Alerta de Sucesso.",
-            detail: "Atualizado com sucesso.",
-            life: 3000,
-          });
-          this.hideDialog();
-        });
-      }
-    },
-
     goNew() {
       this.obj = new User();
       this.visible = true;
-      /*
-      sessionStorage.setItem("user", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.USER_FORM_ROUTE);
-      */
     },
     showUpdate(data) {
       this.obj = data;
       this.visible = true;
-      /*
-      sessionStorage.setItem("user", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.USER_FORM_ROUTE);
-      */
     },
     showRemove(data) {
       this.obj = data;
@@ -152,11 +105,6 @@ export default {
             });
         },
       });
-    },
-    hideDialog() {
-      this.obj = new User();
-      this.visible = false;
-      this.findAll();
     },
   },
 };

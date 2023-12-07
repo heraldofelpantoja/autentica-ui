@@ -24,11 +24,11 @@
     </Fieldset>
 
     <!--DIALOG HERALDO-->
-
     <Dialog
       :visible="visible"
       modal
       header="Formulário de Grupo"
+      :closable="false"
       :style="{ width: '50rem' }"
       class="p-fluid"
     >

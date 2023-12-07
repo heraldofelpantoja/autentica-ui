@@ -48,7 +48,11 @@ export default {
   computed: {
     visible: {
       get() {
-        return this.$store.state.permission.dialogForm;
+        const value = this.$store.state.permission.dialogForm;
+        if (value === true) {
+          this.getData();
+        }
+        return value;
       },
       set(value) {
         this.$store.state.permission.dialogForm = value;
@@ -56,6 +60,9 @@ export default {
     },
   },
   methods: {
+    getData() {
+      this.obj = this.objSelected;
+    },
     hideDialog() {
       this.obj = new Permission();
       this.$emit("findAll");

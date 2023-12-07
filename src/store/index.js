@@ -5,7 +5,10 @@ export default createStore({
     visibleSideBar: false,
     permission: {
       dialogForm: false,
-    }
+    },
+    user: {
+      dialogForm: false,
+    },
   },
   getters: {
   },
