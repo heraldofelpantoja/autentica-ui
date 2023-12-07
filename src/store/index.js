@@ -9,6 +9,13 @@ export default createStore({
     user: {
       dialogForm: false,
     },
+    grupo: {
+      dialogForm: false,
+    },
+    agenda: {
+      dialogForm: false,
+    },
+
   },
   getters: {
   },

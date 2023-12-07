@@ -23,36 +23,8 @@
       </DataTable>
     </Fieldset>
 
-    <!--DIALOG HERALDO-->
-    <Dialog
-      :visible="visible"
-      modal
-      header="Formulário de Grupo"
-      :closable="false"
-      :style="{ width: '50rem' }"
-      class="p-fluid"
-    >
-      <div class="field">
-        <label for="nome_grupo">Nome </label>
-        <InputText
-          id="nome_grupo"
-          placeholder="Digite o nome do Grupo"
-          required
-          v-model="obj.name"
-        />
-      </div>
-
-      <template #footer>
-        <Button
-          label="Cancelar"
-          class="p-button-text"
-          icon="pi pi-times"
-          @click="hideDialog"
-        ></Button>
-
-        <Button label="Salvar" icon="pi pi-check" @click="send"></Button>
-      </template>
-    </Dialog>
+    <!--DIALOG-->
+    <DialogForm :objSelected="obj" @findAll="findAll"></DialogForm>
   </div>
 </template>
 
@@ -64,15 +36,32 @@ import GrupoService from "../../service/grupo_service";
 import Grupo from "../../models/grupo";
 import RoutesName from "@/router/routes_name";
 
+//Components
+import DialogForm from "./components/DialogForm.vue";
+
 export default {
+  components: {
+    DialogForm,
+  },
   data() {
     return {
       obj: new Grupo(),
       list: [],
       service: new GrupoService(),
-      visible: false,
       RoutesName,
     };
+  },
+  computed: {
+    visible: {
+      get() {
+        const value = this.$store.state.grupo.dialogForm;
+        if (value === true) this.getData();
+        return value;
+      },
+      set(value) {
+        this.$store.state.grupo.dialogForm = value;
+      },
+    },
   },
   mounted() {
     this.findAll();

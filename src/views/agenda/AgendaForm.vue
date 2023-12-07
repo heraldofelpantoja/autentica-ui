@@ -14,7 +14,7 @@
       <div class="field col-6">
         <label>Contato</label>
         <InputText
-          placeholder="Selecione as permissões"
+          placeholder="Selecione o contato"
           required
           v-model="obj.contact"
         />
