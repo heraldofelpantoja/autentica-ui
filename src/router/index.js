@@ -9,11 +9,6 @@ const routes = [
     component: () => import('../views/agenda/AgendaView.vue')
   },
   {
-    path: RoutesName.AGENDA_FORM_ROUTE,
-    name: 'agenda-form',
-    component: () => import('../views/agenda/AgendaForm.vue'),
-  },
-  {
     path: RoutesName.GROUP_ROUTE,
     name: 'grupo',
     component: GrupoView

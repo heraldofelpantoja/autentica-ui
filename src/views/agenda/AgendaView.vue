@@ -29,6 +29,9 @@
         ></Column>
       </DataTable>
     </Fieldset>
+
+    <!-- DialogForm -->
+    <DialogForm :obj-selected="obj" @findAll="findAll"></DialogForm>
   </div>
 </template>
 
@@ -38,9 +41,14 @@ import AgendaService from "../../service/agenda_service";
 
 //Models
 import Agenda from "../../models/agenda";
-import RoutesName from "@/router/routes_name";
+
+//Components
+import DialogForm from "./components/DialogForm.vue";
 
 export default {
+  components: {
+    DialogForm,
+  },
   data() {
     return {
       obj: new Agenda(),
@@ -51,6 +59,18 @@ export default {
   mounted() {
     this.findAll();
   },
+  computed: {
+    visible: {
+      get() {
+        const value = this.$store.state.agenda.dialogForm;
+        if (value === true) this.getData();
+        return value;
+      },
+      set(value) {
+        this.$store.state.agenda.dialogForm = value;
+      },
+    },
+  },
   methods: {
     findAll() {
       this.service.findAll().then((data) => {
@@ -59,8 +79,11 @@ export default {
     },
     goNew() {
       this.obj = new Agenda();
-      sessionStorage.setItem("agenda", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.AGENDA_FORM_ROUTE);
+      this.visible = true;
+    },
+    showUpdate(data) {
+      this.obj = data;
+      this.visible = true;
     },
     call(data) {
       this.obj = data;
@@ -83,11 +106,7 @@ export default {
         },
       });
     },
-    showUpdate(data) {
-      this.obj = data;
-      sessionStorage.setItem("agenda", JSON.stringify(this.obj));
-      this.$router.push(RoutesName.AGENDA_FORM_ROUTE);
-    },
+
     showRemove(data) {
       this.obj = data;
       this.$confirm.require({

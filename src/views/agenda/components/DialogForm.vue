@@ -8,40 +8,45 @@
     :closable="false"
     @hide="hideDialog"
   >
-    <div class="grid">
-      <div class="field col-6">
-        <label for="nome_grupo">Nome </label>
-        <InputText
-          id="nome_grupo"
-          placeholder="Digite o nome do Contato"
-          required
-          v-model="obj.name"
-        />
-      </div>
-
-      <div class="field col-6">
-        <label for="contato">Contato:</label>
-        <InputMask
-          mask="(99) 99999-9999"
-          id="nome_contato"
-          placeholder="Digite um contato"
-          required
-          v-model="obj.contact"
-        />
-      </div>
-
-      <div class="field col-6">
-        <label>Grupo</label>
-        <Dropdown
-          v-model="obj.group"
-          :options="groups"
-          optionLabel="name"
-          :filter="true"
-          :showClear="true"
-          placeholder="Selecione o grupo"
-        />
-      </div>
+    <div class="field">
+      <label for="nome_grupo">Nome </label>
+      <InputText
+        id="nome_grupo"
+        placeholder="Digite o nome do Contato"
+        required
+        v-model="obj.name"
+      />
     </div>
+
+    <div class="field">
+      <label for="contato">Contato:</label>
+      <InputMask
+        mask="(99) 99999-9999"
+        id="nome_contato"
+        placeholder="Digite um contato"
+        required
+        v-model="obj.contact"
+      />
+    </div>
+
+    <br />
+    <Fieldset legend="Ligações">
+      <OrderList v-model="obj.call">
+        <template #item="slotProps">
+          <div class="flex flex-wrap p-2 align-items-center gap-3">
+            <div class="flex-1 flex flex-column gap-2">
+              <span class="font-bold">{{
+                Moment(slotProps.item).format("DD/MM/YYYY HH:mm:ss")
+              }}</span>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-phone text-sm"></i>
+                <span>Ligação</span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </OrderList>
+    </Fieldset>
 
     <template #footer>
       <Button
@@ -64,6 +69,8 @@ import Agenda from "../../../models/agenda";
 import AgendaService from "../../../service/agenda_service";
 import GroupService from "../../../service/grupo_service";
 
+import Moment from "moment";
+
 export default {
   props: ["objSelected"],
   data() {
@@ -72,17 +79,18 @@ export default {
       service: new AgendaService(),
       groupService: new GroupService(),
       groups: [],
+      Moment,
     };
   },
   computed: {
     visible: {
       get() {
-        const value = this.$store.state.grupo.dialogForm;
+        const value = this.$store.state.agenda.dialogForm;
         if (value === true) this.getData();
         return value;
       },
       set(value) {
-        this.$store.state.grupo.dialogForm = value;
+        this.$store.state.agenda.dialogForm = value;
       },
     },
   },
@@ -96,7 +104,7 @@ export default {
       });
     },
     hideDialog() {
-      this.obj = new Grupo();
+      this.obj = new Agenda();
       this.$emit("findAll");
       this.visible = false;
     },

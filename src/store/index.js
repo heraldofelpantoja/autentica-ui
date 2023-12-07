@@ -15,7 +15,6 @@ export default createStore({
     agenda: {
       dialogForm: false,
     },
-
   },
   getters: {
   },
